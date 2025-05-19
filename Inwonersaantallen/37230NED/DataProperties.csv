@@ -1,0 +1,104 @@
+"odata.type","ID","Position","ParentID","Type","Key","Title","Description","MapYear","ReleasePolicy","Datatype","Unit","Decimals","Default","PresentationType"
+"Cbs.OData.GeoDimension",0,0,,"GeoDimension","RegioS","Regio's","",,,,,,,
+"Cbs.OData.TimeDimension",1,1,,"TimeDimension","Perioden","Perioden","",,TRUE,,,,,
+"Cbs.OData.Topic",2,2,,"Topic","BevolkingAanHetBeginVanDePeriode_1","Bevolking aan het begin van de periode","Bevolking aan het begin van de geselecteerde periode
+
+Bevolking:
+De inwoners van een bepaald gebied.
+
+In de bevolkingsaantallen zijn uitsluitend personen begrepen die zijn opgenomen in het bevolkingsregister van een Nederlandse gemeente. In principe wordt iedereen die voor onbepaalde tijd in Nederland woont, opgenomen in het bevolkingsregister van de woongemeente. Personen die tot de bevolking van Nederland behoren, maar voor wie geen vaste woonplaats valt aan te wijzen, zijn opgenomen in het bevolkingsregister van de gemeente 's-Gravenhage. In de bevolkingsregisters zijn niet opgenomen de in Nederland wonende personen waarvoor uitzonderingsregels gelden met betrekking tot opneming in de bevolkingsregisters (bijvoorbeeld diplomaten en NAVO militairen) en personen die niet legaal in Nederland verblijven.",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",3,3,,"Topic","LevendGeborenKinderen_2","Levend geboren kinderen","Levend geboren kind:
+Kind dat na geboorte enig teken van leven heeft vertoond, ongeacht de zwangerschapsduur. 
+Levendgeborenen worden geteld naar de woongemeente en niet naar de geboortegemeente.
+
+Trendbreuk nagekomen berichten 
+Vanaf verslagjaar 2010 worden méér nagekomen berichten meegeteld. 
+Voor een beschrijving van nagekomen berichten en de gevolgen voor de cijfers in de tabel zie de Korte onderzoeksbeschrijving Bevolkingsstatistiek in paragraaf 4.
+",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",4,4,,"Topic","Overledenen_3","Overledenen","Overledene:
+Persoon die is overleden waarbij een bevoegde arts een overlijdensakte heeft ondertekend.
+Overledenen worden geteld naar de woongemeente en niet naar de gemeente van overlijden.
+
+Trendbreuk nagekomen berichten 
+Vanaf verslagjaar 2010 worden méér nagekomen berichten meegeteld. 
+Voor een beschrijving van nagekomen berichten en de gevolgen voor de cijfers in de tabel zie de Korte onderzoeksbeschrijving Bevolkingsstatistiek in paragraaf 4.
+",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.TopicGroup",5,,,"TopicGroup","","Vestiging in de gemeente ","Personen die in een gemeente komen wonen na verhuizing uit een andere gemeente in Nederland of uit het buitenland.
+
+Trendbreuk nagekomen berichten 
+Vanaf verslagjaar 2010 worden méér nagekomen berichten meegeteld. 
+Voor een beschrijving van nagekomen berichten en de gevolgen voor de cijfers in de tabel zie de Korte onderzoeksbeschrijving Bevolkingsstatistiek in paragraaf 4.
+",,,,,,,
+"Cbs.OData.Topic",6,5,5,"Topic","TotaleVestiging_4","Totale vestiging",,,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",7,6,5,"Topic","VestigingVanuitEenAndereGemeente_5","Vestiging vanuit een andere gemeente","Personen die verhuizen waarbij het oude en het nieuwe adres in verschillende gemeenten liggen. 
+Wijzigingen van adres door grenswijzigingen tussen gemeenten of door gemeentelijke herindelingen worden niet als verhuizing beschouwd.",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",8,7,5,"Topic","Immigratie_6","Immigratie","Vestiging van personen vanuit het buitenland in Nederland (immigratie). 
+Om als immigrant te kunnen worden geteld dienen deze personen ingeschreven te worden in de gemeentelijke bevolkingsregisters. Men wordt ingeschreven als men verwacht minimaal vier maanden in Nederland te blijven.
+
+Trendbreuk buitenlandse migratiecijfers
+Vanaf 2010 vindt er een kleine verschuiving plaats in de cijfers van de buitenlandse migratie. 
+Meer informatie over de trendbreuken staat in paragraaf 4. 
+",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.TopicGroup",9,,,"TopicGroup","","Vertrek uit de gemeente","Personen die verhuizen naar een andere gemeente in Nederland of naar het buitenland.
+
+Trendbreuk nagekomen berichten 
+Vanaf verslagjaar 2010 worden méér nagekomen berichten meegeteld. 
+Voor een beschrijving van nagekomen berichten en de gevolgen voor de cijfers in de tabel zie de Korte onderzoeksbeschrijving Bevolkingsstatistiek in paragraaf 4.",,,,,,,
+"Cbs.OData.Topic",10,8,9,"Topic","TotaalVertrekInclAdmCorrecties_7","Totaal vertrek (incl. adm. correcties)","Totaal vertrek uit de gemeente inclusief administratieve correcties 
+
+Cijfers over vertrek inclusief administratieve correcties geven een beter beeld van het werkelijke vertrek dan cijfers over vertrek exclusief deze correcties.
+
+Administratieve correcties:
+Administratieve opnemingen in de gemeentelijke bevolkingsregisters of administratieve afvoeringen uit de gemeentelijke bevolkingsregisters.
+
+Administratieve opneming:
+Opneming van een persoon in de bevolkingsregisters van een gemeente op verzoek van de betrokkene. Deze opneming is niet het gevolg van geboorte, immigratie of vestiging van die persoon vanuit een andere gemeente in Nederland. 
+Een administratieve opneming is meestal een hervestiging van een persoon die eerder administratief is afgevoerd en die verklaart nooit uit Nederland te zijn weggeweest.
+
+Administratieve afvoering:
+Verwijdering van een persoon uit de bevolkingsregisters van een gemeente nadat de gemeente heeft vastgesteld dat de verblijfplaats van deze persoon niet bekend is, deze persoon niet bereikbaar is en waarschijnlijk geen inwoner meer is van een Nederlandse gemeente. 
+Een administratieve afvoering is meestal het gevolg van het vertrek van een persoon naar het buitenland zonder dat deze de gemeente hiervan op de hoogte heeft gesteld.",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",11,9,9,"Topic","VertrekNaarAndereGemeente_8","Vertrek naar andere gemeente","Personen die verhuizen waarbij het oude en het nieuwe adres in verschillende gemeenten liggen. 
+Wijzigingen van adres door grenswijzigingen tussen gemeenten of door gemeentelijke herindelingen worden niet als verhuizing beschouwd",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",12,10,9,"Topic","EmigratieInclusiefAdmCorrecties_9","Emigratie inclusief adm. correcties","Emigratie inclusief administratieve correcties
+
+Cijfers over emigratie inclusief administratieve correcties geven een beter beeld van de werkelijke emigratie dan cijfers over emigratie exclusief deze correcties.
+
+Trendbreuk buitenlandse migratiecijfers
+Vanaf 2010 vindt er een kleine verschuiving plaats in de cijfers van de buitenlandse migratie. 
+Meer informatie over de trendbreuken staat in paragraaf 4. 
+
+Emigratie:
+Vertrek van personen naar het buitenland. Men wordt uit het bevolkingsregister afgevoerd als de verwachte verblijfsduur in het buitenland ten minste acht maanden bedraagt. Het gaat hier steeds om de aan de gemeente gemelde emigratie.
+
+Administratieve correcties: 
+Administratieve opnemingen in de gemeentelijke bevolkingsregisters of administratieve afvoeringen uit de gemeentelijke bevolkingsregisters.
+
+Administratieve opneming:
+Opneming van een persoon in de bevolkingsregisters van een gemeente op verzoek van de betrokkene. Deze opneming is niet het gevolg van geboorte, immigratie of vestiging van die persoon vanuit een andere gemeente in Nederland. 
+Een administratieve opneming is meestal een hervestiging van een persoon die eerder administratief is afgevoerd en die verklaart nooit uit Nederland te zijn weggeweest.
+
+Administratieve afvoering:
+Verwijdering van een persoon uit de bevolkingsregisters van een gemeente nadat de gemeente heeft vastgesteld dat de verblijfplaats van deze persoon niet bekend is, deze persoon niet bereikbaar is en waarschijnlijk geen inwoner meer is van een Nederlandse gemeente. 
+Een administratieve afvoering is meestal het gevolg van het vertrek van een persoon naar het buitenland zonder dat deze de gemeente hiervan op de hoogte heeft gesteld.",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",13,11,,"Topic","OverigeCorrecties_10","Overige correcties","Verschillen in de bevolkingsomvang tussen twee opeenvolgende jaren die niet kunnen worden verklaard uit de door de gemeenten gedurende het jaar doorgevoerde wijzigingen in de bevolkingsregisters. 
+
+Er is voor gekozen deze overige correcties slechts in één maand op te nemen, namelijk de maand december. 
+Voor voorlopige cijfers is een schatting voor de overige correcties in de maand december opgenomen.
+
+",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.TopicGroup",14,,,"TopicGroup","","Bevolkingsgroei","De toe- of afname van de bevolking. Inclusief overige correcties.
+
+Overige correcties:
+Verschillen in de bevolkingsomvang en samenstelling tussen twee opeenvolgende jaren die niet kunnen worden verklaard uit de door de gemeenten gedurende het jaar doorgevoerde wijzigingen in de bevolkingsregisters. 
+",,,,,,,
+"Cbs.OData.Topic",15,12,14,"Topic","Bevolkingsgroei_11","Bevolkingsgroei","Bevolkingsgroei in de geselecteerde periode.",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",16,13,14,"Topic","BevolkingsgroeiRelatief_12","Bevolkingsgroei, relatief","Bevolkingsgroei in de geselecteerde periode per honderd inwoners aan het begin van de geselecteerde periode.",,,"Double","%",2,"Impossible","Relative"
+"Cbs.OData.Topic",17,14,14,"Topic","BevolkingsgroeiSinds1Januari_13","Bevolkingsgroei sinds 1 januari","Bevolkingsgroei cumulatief sinds 1 januari.",,,"Long","aantal",0,"Impossible","Absolute"
+"Cbs.OData.Topic",18,15,14,"Topic","BevolkingsgroeiSinds1JanuariRela_14","Bevolkingsgroei sinds 1 januari, rela...","Bevolkingsgroei cumulatief sinds 1 januari per honderd inwoners op 1 januari.",,,"Double","%",2,"Impossible","Relative"
+"Cbs.OData.Topic",19,16,,"Topic","BevolkingAanHetEindeVanDePeriode_15","Bevolking aan het einde van de periode","Bevolking aan het einde van de geselecteerde periode
+
+Bevolking:
+De inwoners van een bepaald gebied.
+
+In de bevolkingsaantallen zijn uitsluitend personen begrepen die zijn opgenomen in het bevolkingsregister van een Nederlandse gemeente. In principe wordt iedereen die voor onbepaalde tijd in Nederland woont, opgenomen in het bevolkingsregister van de woongemeente. Personen die tot de bevolking van Nederland behoren, maar voor wie geen vaste woonplaats valt aan te wijzen, zijn opgenomen in het bevolkingsregister van de gemeente 's-Gravenhage. In de bevolkingsregisters zijn niet opgenomen de in Nederland wonende personen waarvoor uitzonderingsregels gelden met betrekking tot opneming in de bevolkingsregisters (bijvoorbeeld diplomaten en NAVO militairen) en personen die niet legaal in Nederland verblijven.",,,"Long","aantal",0,"Impossible","Absolute"
