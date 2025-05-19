@@ -1,0 +1,360 @@
+---
+format:
+  docx:
+    reference_doc: Styling_template.docx
+    toc: true
+    toc-title: "Inhoudsopgave"
+
+---
+
+
+```{r setup, include=FALSE}
+
+# Initialisatie voor Markdown
+knitr::opts_chunk$set(fig.width = 10, 
+                      fig.height = 5,
+                      ft.align = "left",
+                      echo = FALSE, 
+                      warning = FALSE, 
+                      message = FALSE)
+
+# Gooi eventueel bestaande variabelen weg
+rm(list=ls())
+
+# Lees strings niet in als factors
+options(stringsAsFactors = FALSE)
+
+# Geschreven met R versie 4.0.2. Versies van packages staan hieronder. Het is niet noodzakelijk
+# om exact dezelfde versies te hebben, maar het kan een aanknopingspunt geven op het moment dat
+# bepaalde dingen niet werken
+
+# Eenmaling uitvoeren:
+# install.packages("webshot") # versie 0.5.2
+# webshot::install_phantomjs()
+## => Dit was zo bij eerdere rapportagetool. Nu ook nog nodig? Lijkt voor flextable te zijn: https://davidgohel.github.io/flextable/reference/save_as_image.html
+
+# Packages voor:
+# Data inlezen
+library(readxl) # versie 1.3.1
+library(readr) # versie 2.1.2
+
+# Databewerking
+library(dplyr) # versie 1.0.8
+library(lubridate) # versie 1.8.0
+library(tidyr) # versie 1.2.0
+library(stringr) # versie 1.4.0
+
+# Plots
+library(ggplot2) # versie 3.3.5
+
+# Tabellen. 
+library(officer) # versie 0.6.2
+library(flextable) # versie 0.9.1
+
+#Inwonersaantallen bijwerken
+library(cbsodataR)
+
+# Kwartaal- of jaarrapport? 1 = Q1 (eerste kwartaal), 2 = Q2, 3 = Q3, 4 = Q4, 5 = jaarrapport  
+type_rapport <- 1
+
+### Geef op hoe de bestanden heten + de tabbladen waarop de relevante data staat
+
+# Inwonersaantallen, landelijke cijfers (Osiris) en link tussen RIVM schrijfwijze en HPZone als Excel bestanden
+pad_naar_inwonersaantallen <- "input/Inwonersaantallen_06_07_Pieter.xlsx"
+naam_sheet_inwonersaantallen <- "Sheet1"
+
+pad_naar_Osiris_bestand <- "input/Cijfers Osiris - kwartaal.xlsx"
+naam_sheet_Osiris_data <- "Blad1"
+
+pad_naar_link_RIVM_HPZone <- "input/Link ziektenamen HPZone RIVM.xlsx"
+naam_sheet_link_RIVM_HPZone <- "Blad1"
+
+
+# Cases, situations en enquiries als csv bestanden
+pad_naar_cases_bestand <- "input/cases 2019 Q1 - 2024 Q1.csv"
+datum_export_cases <- format(fs::file_info(pad_naar_cases_bestand)$modification_time,format = "%d-%m%-%Y")
+
+pad_naar_situations_bestand <- "input/situations 2019 Q1 - 2024 Q1.csv"
+datum_export_situations <- format(fs::file_info(pad_naar_situations_bestand)$modification_time,format = "%d-%m%-%Y")
+
+pad_naar_telefoonbestand <- "input/enquiries 2019 Q1 - 2024 Q1.csv"
+datum_export_telefoonbestand <- format(fs::file_info(pad_naar_cases_bestand)$modification_time,format = "%d-%m%-%Y")
+
+# Vul naam in voor de overkoepelende regio
+Regionaam <- "ZeeBraLim"
+
+#Vul hier de namen in voor alle GGD-regios zoals in CBS data
+GGD_namen_cbs <- c("GGD Brabant-Zuidoost",
+                    "GGD Hart voor Brabant",
+                    "GGD Limburg-Noord",
+                    "GGD West-Brabant",
+                    "GGD Zeeland",
+                    "GGD Zuid-Limburg")
+#Vul hier eventueel alternatieve namen voor de GGD regio's in zoals je ze weergegeven.
+#wilt hebben in de rapportage. Laat op NULL als de standaard namen hierboven goed zijn: 
+#GGD_namen_aangepast <- NULL
+
+#Let op; dezelfde volgorde als GGD_namen_cbs
+GGD_namen_aangepast <- c("BZO","HvB","LN","WB","Zee","ZL")
+
+#Als het bestand inwonersaantallen.xlsx nog niet bestaat, of
+#de laatste wijziging ouder is dan begin dit jaar: downloaden van CBS.
+if(!file.exists("input/Inwonersaantallen.xlsx") | 
+   fs::file_info("input/Inwonersaantallen.xlsx")$modification_time < year(today())){
+#Vraag Jolien:als je in maart over het 1e kwartaal wilt runnen; zijn dan de inwonersaantallen van 1 jan al bekend?
+
+  source("subscripts/Script_inwonersaantallen_opvragen.R")
+  
+}
+
+### Laad subscripts in
+source("subscripts/round2.R", local = TRUE)
+source("subscripts/lees_bestand.R", local = TRUE)
+source("subscripts/databewerking.R", local = TRUE)
+source("subscripts/plot_incidentie.R", local = TRUE)
+
+
+### Plot grafieken (tabellen zijn al aangemaakt in subscript databewerking.R)
+
+# Dataframes die hier als input dienen worden aangemaakt binnen subscript databewerking.R
+# Functie plot_incidentie is aangemaakt binnen plot_incidentie.R
+
+
+# Cases
+plot_meldplichtziekten_totaal <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "totaal", exclusie = "Scabies") 
+
+plot_zonder_kinkhoest <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", exclusie = "Kinkhoest (Pertussis)")
+plot_kinkhoest1 <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Kinkhoest (Pertussis)")
+plot_kinkhoest2 <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar %>%
+                                    filter(Jaar %in% c(2023,2024)), kolom = "Meldingsplichtige.ziekte", ziekte = "Kinkhoest (Pertussis)") 
+plot_buiktyfus <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Buiktyfus")
+
+plot_mpox <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Monkeypox")
+plot_igas <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Invasieve groep A-streptokokkeninfectie")
+plot_pneumokok <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Invasieve pneumokokkenziekte")
+plot_legionellose <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Legionellose")
+plot_rabies <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Rabies (Hondsdolheid)")
+plot_scabies <- plot_incidentie(data = ziekten_incl_regio_per_maandJaar, kolom = "Meldingsplichtige.ziekte", ziekte = "Scabies")
+
+# Situations
+plot_artikel26_totaal <- plot_incidentie(data = scenario_incl_regio_per_maandJaar, kolom = "Scenario", ziekte = "totaal")
+plot_artikel26_gastro <- plot_incidentie(data = scenario_incl_regio_per_maandJaar, kolom = "Scenario", ziekte = "Gastroenteritis")
+plot_artikel26_huiduitslag <- plot_incidentie(data = scenario_incl_regio_per_maandJaar, kolom = "Scenario", ziekte = "Huiduitslag/exanthemen")
+
+plot_artikel26_huiduitslag_varicella <- plot_incidentie(data = scenario_Agent_incl_regio_per_maandJaar, kolom = "Scenario", ziekte = "Huiduitslag/exanthemen", kolom_uitsplitsing = "Infectious.Agent", uitsplitsing = c("Varicella-zoster virus"))
+
+
+# Telefoontjes
+plot_telefoon_totaal <- plot_incidentie(data = telefoon_incl_regio_per_maandJaar, kolom = "Specific.Topic", ziekte = "totaal") 
+plot_telefoon_scabies <- plot_incidentie(data = telefoon_incl_regio_per_maandJaar, kolom = "Specific.Topic", ziekte = "Scabies (Schurft)") 
+plot_telefoon_mazelen <- plot_incidentie(data = telefoon_incl_regio_per_maandJaar %>%
+                                    filter(Jaar %in% c(2023,2024)), kolom = "Specific.Topic", ziekte = "Mazelen") 
+
+plot_telefoon_buiktyfus_anders <- plot_incidentie(data = telefoon_incl_regio_per_maandJaar, kolom = "Specific.Topic", ziekte = c("Buiktyfus", "Anders")) 
+
+#Functie van SO om een flextable tabel aan te passen op paginagrootte van wordbestand
+#;https://stackoverflow.com/questions/57175351/flextable-autofit-in-a-rmarkdown-to-word-doc-causes-table-to-go-outside-page-mar
+
+FitFlextableToPage <- function(ft, pgwidth = 6){
+  
+  ft_out <- ft %>% autofit()
+  
+  ft_out <- width(ft_out, width = dim(ft_out)$widths*pgwidth /(flextable_dim(ft_out)$widths))
+  return(ft_out)
+}
+
+
+```
+
+\newpage
+
+# Regionale surveillance ZeeBraLim kwartaaloverzicht van Q1 2024
+Datum export gegevens meldingsplichtige ziekten: 26-04-2024
+
+## Meldingsplichtige ziekten (excl. kinkhoest en COVID-19) per 1 miljoen inwoners
+
+```{r 1meldplichtZiekten_zonder_kinkhoest_plot, dpi=600}
+plot_zonder_kinkhoest
+
+```
+
+
+\newpage
+
+## Overzicht meldingsplichtige ziekten per GGD in 1e kwartaal 2024: aantal en incidentie per 1 miljoen inwoners
+Overzicht meldingsplichtige ziekten per GGD in kwartaal 1 2024, exclusief COVID-19 (time entered): aantal en incidentie per 1 miljoen inwoners (geselecteerd op confidence: confirmed, possible en probable en op status: definitief en gefiatteerd). Getallen incidentie in de tabel zijn afgerond. Een incidentie van 0 betekent niet per se dat de ziekte niet in de regio voorkomt, maar kan ook op afronding berusten. In de laatste kolom van de tabel zijn de incidenties voor ZeeBraLim van dezelfde periode in het voorgaande jaar weergegeven ter vergelijking.  De landelijke cijfers zijn afkomstig uit Osiris en zijn, anders dan de regionale cijfers, gebaseerd op eerste ziektedag  (wanneer de eerste ziektedag onbekend is datum van diagnose en als die onbekend is de datum van melding aan de GGD). De cijfers lopen daardoor niet altijd synchroon.
+
+Let op: vanaf 2024 zijn de landelijke cijfers inclusief gefiatteerde en definitieve Osiris meldingen. Hierdoor zijn de landelijke gegevens in dit verslag niet te vergelijken met verslagen uit voorgaande jaren. 
+
+
+```{r meldplichtZiekten_tabel}
+tabel_meldplichtZiekten
+
+```
+
+
+\newpage
+
+## Kinkhoest per 1 miljoen inwoners
+
+```{r 1meldplichtZiekten_kinkhoest1_plot, dpi=600}
+plot_kinkhoest1
+
+```
+
+
+\newpage
+
+## Kinkhoest per 1 miljoen inwoners in 2023 en 2024
+
+```{r 1meldplichtZiekten_kinkhoest2_plot, dpi=600}
+plot_kinkhoest2
+
+```
+
+
+\newpage
+
+## Invasieve groep A-streptokokkeninfectie per 1 miljoen inwoners
+
+```{r 1meldplichtZiekten_igas_plot, dpi=600}
+plot_igas
+
+```
+
+
+\newpage
+
+## Invasieve pneumokokkenziekte per 1 miljoen inwoners
+
+```{r 1meldplichtZiekten_pneumo_plot, dpi=600}
+plot_pneumokok
+
+```
+
+
+\newpage
+
+## Legionellose per 1 miljoen inwoners
+
+```{r 1meldplichtZiekten_legionellose_plot, dpi=600}
+plot_legionellose
+
+```
+
+
+# Niet meldingsplichtige ziekten
+
+## Rabies risico cases per 1 miljoen inwoners
+
+```{r 1meldplichtZiekten_rabies_plot, dpi=600}
+plot_rabies
+
+```
+
+
+## Scabies cases per 1 miljoen inwoners
+
+```{r 1meldplichtZiekten_scabies_plot, dpi=600}
+plot_scabies
+
+```
+
+
+\newpage
+
+# Meldingsplichtige uitbraken instellingen
+Datum export: `r datum_export_cases`
+
+## Incidentie art 26 meldingen (excl. COVID-19), per 1 miljoen inwoners
+
+```{r Artikel26_totaal_plot, dpi=600}
+plot_artikel26_totaal
+
+```
+
+\newpage
+
+## Art 26 meldingen 1e kwartaal 2024; aantal en incidentie per scenario
+
+```{r scenario_tabel}
+tabel_scenario
+
+```
+
+\newpage
+
+## Art 26 meldingen 1e kwartaal 2024; aantal en incidentie per Principal Contextual Setting
+
+```{r PrincipalContext_tabel}
+tabel_PrincipalContext
+
+```
+
+\newpage
+
+## Incidentie art 26 meldingen gastro-enteritis per miljoen inwoners
+
+```{r Artikel26_gastro_plot, dpi=600}
+plot_artikel26_gastro
+
+```
+
+\newpage
+
+## Incidentie art 26 meldingen huiduitslag/exantheem per 1 miljoen inwoners
+
+```{r Artikel26_huiduitslag_plot, dpi=600}
+plot_artikel26_huiduitslag
+
+```
+
+\newpage
+
+## Uitsplitsing huiduitslag/exantheem: Varicella zostervirus (waterpokken)
+
+```{r Artikel26_huiduitslag_varicella_plot, dpi=600}
+plot_artikel26_huiduitslag_varicella
+
+```
+
+
+
+
+\newpage
+
+# Telefonische vragen  
+Datum export: `r datum_export_telefoonbestand`
+Broad topic: infectieziekten
+
+## Telefonische vragen (excl. COVID-19)
+
+```{r telefoon_totaal, dpi=600}
+plot_telefoon_totaal
+
+```
+
+## Incidentie telefonische vragen over scabies per 1 miljoen inwoners
+
+```{r telefoon_scabies, dpi=600}
+plot_telefoon_scabies
+
+```
+
+## Incidentie telefonische vragen over mazelen per 1 miljoen inwoners
+
+```{r telefoon_mazelen, dpi=600}
+plot_telefoon_mazelen
+
+```
+
+\newpage
+
+# Top 5 aantal telefonische vragen per thema per GGD
+```{r top5, dpi=600}
+
+#Zie functie in setup R.
+top5_tabel
+
+
+```
