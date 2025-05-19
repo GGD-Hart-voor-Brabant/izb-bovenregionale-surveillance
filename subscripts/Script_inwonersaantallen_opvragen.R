@@ -39,21 +39,45 @@ library(tidyr)
 
 
 
-gemeenten_per_GGD_per_jaar <- cbind("tabelcode" = c("83287NED","83553NED","83859NED", "84378NED","84721NED","84929NED","85067NED","85385NED", "85755NED"),
+# #Vul hier de namen in voor alle GGD-regios zoals in CBS data
+# GGD_namen_cbs <- c("GGD Brabant-Zuidoost",
+#                    "GGD Hart voor Brabant",
+#                    "GGD Limburg-Noord",
+#                    "GGD West-Brabant",
+#                    "GGD Zeeland",
+#                    "GGD Zuid-Limburg")
+# #Vul hier eventueel alternatieve namen voor de GGD regio's in zoals je ze weergegeven.
+# #wilt hebben in de rapportage. Laat op NULL als de standaard namen hierboven goed zijn: 
+# #GGD_namen_aangepast <- NULL
+# 
+# #Let op; dezelfde volgorde als GGD_namen_cbs
+# GGD_namen_aangepast <- c("BZO","HvB","LN","WB","Zee","ZL")
+
+gemeenten_per_GGD_per_jaar <- cbind("tabelcode" = c("83287NED","83553NED","83859NED", "84378NED","84721NED",
+                                                    "84929NED","85067NED","85385NED", "85755NED"),
                                     "jaar" = c(2016:2024))
-jaren <- 2016:2024
 
 inwoners_per_jaar <- lapply(1:nrow(gemeenten_per_GGD_per_jaar), function(x){
   
   tabelcode =  gemeenten_per_GGD_per_jaar[x,1]
   jaar = gemeenten_per_GGD_per_jaar[x,2]
   
+  
+  #TODO Houtje touwtje workaround vervangen wanneer CBS API update krijgt. CBS API codeert GGD-regio anders vanaf 2023
+  
+  te_selecteren = c("Code_1","Naam_2","Code_14","Naam_15")
+  GGD_filter_var = "Naam_15"
+  
+  if(as.numeric(jaar) >= 2023){
+    te_selecteren = c("Code_1","Naam_2","Code_16","Naam_17")
+    GGD_filter_var = "Naam_17"
+  }
+  
   #Gemeentelijke indeling per GGD voor dat jaar ophalen
-  gemeenten_per_jaar <- cbs_get_data(tabelcode,
-                                         select = c("Code_1","Naam_2","Code_14","Naam_15")) %>%
+  gemeenten_per_jaar <- cbs_get_data(tabelcode, select = te_selecteren) %>%
     mutate(Code_1 = str_trim(Code_1, side = "both"),
-           Naam_15 = str_trim(Naam_15, side = "both")) %>%
-    filter(Naam_15 %in% GGD_namen_cbs)
+           !!sym(GGD_filter_var) := str_trim(!!sym(GGD_filter_var), side = "both")) %>%
+    filter(!!sym(GGD_filter_var) %in% GGD_namen_cbs)
   
   jaarcode = paste0(jaar,"MM01")
   
@@ -64,7 +88,7 @@ inwoners_per_jaar <- lapply(1:nrow(gemeenten_per_GGD_per_jaar), function(x){
                                                "Perioden",
                                                "BevolkingAanHetBeginVanDePeriode_1")) %>%
     left_join(gemeenten_per_jaar, by = c("RegioS" = "Code_1")) %>%
-    rename("GGD" = "Naam_15") %>%
+    rename("GGD" = GGD_filter_var) %>%
     group_by(GGD) %>%
     summarise(Aantal = sum(BevolkingAanHetBeginVanDePeriode_1)) %>%
     mutate(Jaar = jaar)
@@ -123,3 +147,4 @@ if(!is.null(GGD_namen_aangepast)){
 }
 
 writexl::write_xlsx(inwonersaantallen_breed,"input/Inwonersaantallen.xlsx")
+
